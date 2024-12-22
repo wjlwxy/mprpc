@@ -21,6 +21,8 @@ message LoginResponse
     bool success = 2;
 }
 
+// 如果还要做其他业务的话，可能Response（类似于LoginResponse）需要添加更多的返回值，而不仅仅是success和resultcode，或者说success一般需要改成调用方需要的结果，如好友列表之类的
+
 service UserServiceRpc
 {
     rpc Login(LoginRequest) returns(LoginResponse);
