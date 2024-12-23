@@ -15,7 +15,7 @@ public:
     bool Login(std::string name, std::string pwd)
     {
         std::cout << "doing local service: Login" << std::endl;
-        std::cout << "name:" << name << "pwd:" << std::endl;
+        std::cout << "name:" << name << "pwd:" << pwd << std::endl;
 
         return true;
     }
@@ -35,13 +35,29 @@ public:
         std::string pwd = request->pwd();
 
         // 做本地业务
-        bool login_result = Login(name, pwd); 
+        bool login_result = Login(name, pwd);
 
         // 把响应写入
         fixbug::ResultCode *code = response->mutable_result();
         code->set_errmsg("");
         code->set_errcode(0);
         response->set_success(login_result);
+
+        // std::cout << "errcode:" << code->errcode() << std::endl;
+        // std::cout << "errcode:" << response->result().errcode() << std::endl;
+
+        /*
+        调试用代码，response可能存在问题
+        std::string response_str;
+        if (response->SerializeToString(&response_str)) // response进行序列化
+        {
+            std::cout << "response_str: " << response_str << std::endl;
+        }
+        else
+        {
+            std::cout << "serialize response_str error!" << std::endl;
+        }
+        */
 
         // 执行回调操作 执行响应对象数据的序列化和网络发送（都是由框架来完成的）
         done->Run();

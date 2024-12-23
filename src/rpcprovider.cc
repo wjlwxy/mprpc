@@ -145,6 +145,7 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
         return;
     }
     google::protobuf::Message *response = service->GetResponsePrototype(method).New();
+    // std::cout << "errcode:" << response->result().errcode() << std::endl; // 调试代码，response可能存在问题，并未具备fixbug::LoginResponse的属性
 
     // 给下面的method方法的调用，绑定一个Closure的回调函数
     google::protobuf::Closure *done = google::protobuf::NewCallback<RpcProvider, const muduo::net::TcpConnectionPtr &, google::protobuf::Message *>(this, &RpcProvider::SendRpcResponse, conn, response); // 生成一个Closure* done对象
@@ -162,6 +163,8 @@ void RpcProvider::SendRpcResponse(const muduo::net::TcpConnectionPtr &conn, goog
     {
         // 序列化成功后，通过网络把rpc方法执行的结果发送给rpc的调用方
         conn->send(response_str);
+        // std::cout << "errcode:" << response->result().errcode() << std::endl;
+        // std::cout << "response_str: " << response_str << std::endl;
     }
     else
     {
