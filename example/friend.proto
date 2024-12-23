@@ -1,0 +1,28 @@
+syntax = "proto3";
+package fixbug;
+
+option cc_generic_services = true;
+
+message ResultCode
+{
+    int32 errcode = 1;
+    bytes errmsg = 2;
+}
+
+message GetfriendslistRequest
+{
+    uint32 userid = 1;
+}
+
+message GetfriendslistResponse
+{
+    ResultCode result = 1;
+    repeated bytes friends = 2;
+}
+
+// 如果还要做其他业务的话，可能Response（类似于LoginResponse）需要添加更多的返回值，而不仅仅是success和resultcode，或者说success一般需要改成调用方需要的结果，如好友列表之类的
+
+service FriendsServiceRpc
+{
+    rpc Getfriendlist(GetfriendslistRequest) returns(GetfriendslistResponse);
+} 
