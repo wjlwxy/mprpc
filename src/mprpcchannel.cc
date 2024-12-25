@@ -1,4 +1,3 @@
-#include "mprpcchannel.h"
 #include <string>
 #include <iostream>
 #include <sys/types.h>
@@ -8,6 +7,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 #include <unistd.h>
+#include "logger.h"
 
 // 所有通过stub代理对象调用的rpc方法，都走到这里了，统一做rpc方法调用的数据序列化和网络发送
 void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
@@ -26,7 +26,7 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     }
     else
     {
-        std::cout << "serialize request error!" << std::endl;
+        controller->SetFailed("serialize request error!");
         return;
     }
     // 定义rpc的请求header
@@ -43,7 +43,7 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     }
     else
     {
-        std::cout << "serialize rpc header error!" << std::endl;
+        controller->SetFailed("serialize rpc header error!");
         return;
     }
 
@@ -66,8 +66,10 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     int clientfd = socket(AF_INET, SOCK_STREAM, 0);
     if (-1 == clientfd)
     {
-        std::cout << "create socket error! errno:" << errno << std::endl;
-        exit(EXIT_FAILURE);
+        char error[128] = {0};
+        sprintf(error, "create socket error! errno:%d", errno); // 将错误信息写入error 函数用于将格式化的数据写入字符串。其用法类似于 printf，但输出目标是字符串而不是标准输出。
+        controller->SetFailed(error);
+        return;
     }
 
     // 连接rpc服务端
@@ -79,25 +81,31 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     server_addr.sin_addr.s_addr = inet_addr(rpc_server_ip.c_str());
     if (-1 == connect(clientfd, (struct sockaddr *)&server_addr, sizeof(server_addr))) // 连接rpc服务端
     {
-        std::cout << "connect error! errno:" << errno << std::endl;
+        char error[128] = {0};
+        sprintf(error, "connect error! errno:%d", errno); // 将错误信息写入error 函数用于将格式化的数据写入字符串。其用法类似于 printf，但输出目标是字符串而不是标准输出。
+        controller->SetFailed(error);
         close(clientfd);
-        exit(EXIT_FAILURE);
+        return;
     }
 
     // 发送rpc请求数据
     if (-1 == send(clientfd, send_rpc_str.c_str(), send_rpc_str.size(), 0))
     {
-        std::cout << "send error! errno:" << errno << std::endl;
+        char error[128] = {0};
+        sprintf(error, "send error! errno:%d", errno); // 将错误信息写入error 函数用于将格式化的数据写入字符串。其用法类似于 printf，但输出目标是字符串而不是标准输出。
+        controller->SetFailed(error);
         close(clientfd);
         return;
     }
 
     // 接收rpc响应数据
-    char recv_buf[1024] = {0};
+    char recv_buf[900] = {0};
     int recv_len = recv(clientfd, recv_buf, 1024, 0);
     if (-1 == recv_len)
     {
-        std::cout << "recv error! errno:" << errno << std::endl;
+        char error[128] = {0};
+        sprintf(error, "recv error! errno:%d", errno); // 将错误信息写入error 函数用于将格式化的数据写入字符串。其用法类似于 printf，但输出目标是字符串而不是标准输出。
+        controller->SetFailed(error);
         close(clientfd);
         return;
     }
@@ -107,12 +115,15 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor *method,
     // std::cout << "response_str: " << response_str << std::endl;
     if (response->ParseFromArray(recv_buf, recv_len))
     {
-        std::cout << "rpc response parse success!" << std::endl;
+        LOG_INFO("rpc response parse success!");
+        // std::cout << "rpc response parse success!" << std::endl;
         // std::cout << "errcode: " << response->result().errcode() << std::endl;
     }
     else
     {
-        std::cout << "rpc response parse error!" << std::endl;
+        char error[1024] = {0};
+        sprintf(error, "rpc response parse error! response_str:%s", recv_buf); // 将错误信息写入error 函数用于将格式化的数据写入字符串。其用法类似于 printf，但输出目标是字符串而不是标准输出。
+        controller->SetFailed(error);
         close(clientfd);
         return;
     }

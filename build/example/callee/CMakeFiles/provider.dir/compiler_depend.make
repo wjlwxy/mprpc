@@ -696,6 +696,9 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
   /usr/local/include/google/protobuf/service.h \
   ../src/include/mprpcapplication.h \
   ../src/include/mprpcconfig.h \
+  ../src/include/mprpcchannel.h \
+  ../src/include/rpcheader.pb.h \
+  ../src/include/mprpccontroller.h \
   ../src/include/rpcprovider.h \
   /usr/include/muduo/net/TcpServer.h \
   /usr/include/muduo/base/Atomic.h \
@@ -780,8 +783,25 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
   /usr/include/muduo/net/EventLoop.h \
   /usr/include/muduo/base/Mutex.h \
   /usr/include/muduo/base/CurrentThread.h \
-  /usr/include/muduo/net/TimerId.h
+  /usr/include/muduo/net/TimerId.h \
+  ../src/include/logger.h \
+  ../src/include/lockqueue.h \
+  /usr/include/c++/11/queue \
+  /usr/include/c++/11/deque \
+  /usr/include/c++/11/bits/stl_deque.h \
+  /usr/include/c++/11/bits/deque.tcc \
+  /usr/include/c++/11/bits/stl_queue.h \
+  /usr/include/c++/11/thread \
+  /usr/include/c++/11/bits/std_thread.h \
+  /usr/include/c++/11/bits/this_thread_sleep.h \
+  /usr/include/c++/11/condition_variable
 
+
+/usr/include/c++/11/bits/deque.tcc:
+
+../src/include/lockqueue.h:
+
+../src/include/logger.h:
 
 /usr/include/muduo/base/CurrentThread.h:
 
@@ -871,6 +891,8 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
 
 ../src/include/rpcprovider.h:
 
+../src/include/mprpccontroller.h:
+
 ../example/callee/friendservice.cc:
 
 /usr/include/c++/11/cassert:
@@ -892,6 +914,10 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
 /usr/local/include/google/protobuf/metadata.h:
 
 /usr/local/include/google/protobuf/inlined_string_field.h:
+
+/usr/include/c++/11/deque:
+
+../src/include/mprpcchannel.h:
 
 /usr/local/include/google/protobuf/generated_enum_reflection.h:
 
@@ -918,6 +944,10 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
 /usr/include/c++/11/bits/parse_numbers.h:
 
 /usr/include/c++/11/ctime:
+
+/usr/include/c++/11/condition_variable:
+
+/usr/include/c++/11/thread:
 
 /usr/include/muduo/net/TcpServer.h:
 
@@ -971,9 +1001,13 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
 
 /usr/include/c++/11/backward/auto_ptr.h:
 
+/usr/include/c++/11/queue:
+
 /usr/include/c++/11/bits/shared_ptr_atomic.h:
 
 /usr/include/c++/11/ext/concurrence.h:
+
+../src/include/rpcheader.pb.h:
 
 /usr/include/c++/11/bits/allocated_ptr.h:
 
@@ -1080,6 +1114,8 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
 /usr/include/x86_64-linux-gnu/c++/11/bits/gthr-default.h:
 
 /usr/include/x86_64-linux-gnu/bits/endian.h:
+
+/usr/include/c++/11/bits/stl_deque.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs.h:
 
@@ -1196,6 +1232,8 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
 /usr/include/c++/11/bits/atomic_base.h:
 
 /usr/include/features.h:
+
+/usr/include/c++/11/bits/this_thread_sleep.h:
 
 /usr/include/c++/11/bits/locale_facets.tcc:
 
@@ -1327,11 +1365,15 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: ../example/callee/fri
 
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
 
+/usr/include/c++/11/bits/stl_queue.h:
+
 /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/struct_timespec.h:
 
 /usr/include/ctype.h:
+
+/usr/include/c++/11/bits/std_thread.h:
 
 /usr/include/c++/11/bits/cpp_type_traits.h:
 

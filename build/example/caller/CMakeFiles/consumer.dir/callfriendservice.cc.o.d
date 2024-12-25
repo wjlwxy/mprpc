@@ -159,7 +159,9 @@ example/caller/CMakeFiles/consumer.dir/callfriendservice.cc.o: \
  /usr/include/c++/11/bits/node_handle.h \
  /usr/include/c++/11/bits/unordered_map.h \
  /usr/include/c++/11/bits/erase_if.h \
- /home/wj/code/mprpc/example/friend.pb.h /usr/include/c++/11/limits \
+ /home/wj/code/mprpc/src/include/mprpcchannel.h \
+ /home/wj/code/mprpc/src/include/rpcheader.pb.h \
+ /usr/include/c++/11/limits \
  /usr/local/include/google/protobuf/port_def.inc \
  /usr/local/include/google/protobuf/port_undef.inc \
  /usr/local/include/google/protobuf/io/coded_stream.h \
@@ -289,5 +291,5 @@ example/caller/CMakeFiles/consumer.dir/callfriendservice.cc.o: \
  /usr/local/include/google/protobuf/message.h \
  /usr/local/include/google/protobuf/extension_set.h \
  /usr/include/c++/11/cassert /usr/local/include/google/protobuf/service.h \
- /home/wj/code/mprpc/src/include/mprpcchannel.h \
- /home/wj/code/mprpc/src/include/rpcheader.pb.h
+ /home/wj/code/mprpc/src/include/mprpccontroller.h \
+ /home/wj/code/mprpc/example/friend.pb.h

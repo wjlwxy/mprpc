@@ -1,0 +1,11 @@
+2024-12-25 16:35:12
+FriendService start
+2024-12-25 16:35:12
+/home/wj/code/mprpc/example/callee/friendservice.cc:main:61
+2024-12-25 16:35:56
+FriendService start
+2024-12-25 16:35:56
+/home/wj/code/mprpc/example/callee/friendservice.cc:main:61
+2024-12-25 17:34:24 => [INFO]service_name:FriendsServiceRpc methodCnt:1
+2024-12-25 17:34:25 => [INFO]method_name:Getfriendlist
+2024-12-25 17:34:25 => [INFO]RpcProvider::Run server start at ip:127.0.0.1 port:8001

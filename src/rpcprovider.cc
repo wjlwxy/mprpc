@@ -1,6 +1,7 @@
 #include "rpcprovider.h"
 #include "mprpcapplication.h"
 #include "rpcheader.pb.h"
+#include "logger.h"
 
 /*
 service_name =>  service服务描述
@@ -21,7 +22,7 @@ void RpcProvider::NotifyService(google::protobuf::Service *service)
     // 获取服务对象service的方法的数量
     int methodCnt = pserviceDesc->method_count();
 
-    std::cout << "service_name:" << service_name << std::endl;
+    LOG_INFO("service_name:%s methodCnt:%d", service_name.c_str(), methodCnt);
 
     for (int i = 0; i < methodCnt; i++)
     {
@@ -30,7 +31,7 @@ void RpcProvider::NotifyService(google::protobuf::Service *service)
         std::string method_name = pmethodDesc->name();
         service_info.m_methodMap.insert({method_name, pmethodDesc});
 
-        std::cout << "method_name:" << method_name << std::endl;
+        LOG_INFO("method_name:%s", method_name.c_str());
     }
     service_info.m_service = service;
     m_serviceMap.insert({service_name, service_info});
@@ -55,7 +56,9 @@ void RpcProvider::Run()
     // 设置muduo库的线程数量
     server.setThreadNum(4);
 
-    std::cout << "RpcProvider start service at ip:" << ip << " port:" << port << std::endl;
+    // 将当前rpc节点上要发布的服务全部注册到muduo的TcpServer服务中
+    LOG_INFO("RpcProvider::Run server start at ip:%s port:%d", ip.c_str(), port);
+    // std::cout << "RpcProvider start service at ip:" << ip << " port:" << port << std::endl;
 
     // 启动网络服务
     server.start();
@@ -104,7 +107,8 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     else
     {
         // 数据头反序列化失败
-        std::cout << "rpc_header_str:" << rpc_header_str << " parse error!" << std::endl;
+        LOG_ERROR("rpc_header_str:%s parse error!", rpc_header_str.c_str());
+        // std::cout << "rpc_header_str:" << rpc_header_str << " parse error!" << std::endl;
         return;
     }
 
@@ -124,14 +128,16 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     auto it = m_serviceMap.find(service_name);
     if (it == m_serviceMap.end())
     {
-        std::cout << service_name << " is not exist!" << std::endl;
+        LOG_ERROR("%s is not exist!", service_name.c_str());
+        // std::cout << service_name << " is not exist!" << std::endl;
         return;
     }
 
     auto mit = it->second.m_methodMap.find(method_name);
     if (mit == it->second.m_methodMap.end())
     {
-        std::cout << service_name << ":" << method_name << " is not exist!" << std::endl;
+        LOG_ERROR("%s:%s is not exist!", service_name.c_str(), method_name.c_str());
+        // std::cout << service_name << ":" << method_name << " is not exist!" << std::endl;
         return;
     }
     google::protobuf::Service *service = it->second.m_service;      // 获取service对象，new UserService
@@ -141,7 +147,7 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     google::protobuf::Message *request = service->GetRequestPrototype(method).New();
     if (!request->ParseFromString(rpc_args_str))
     {
-        std::cout << service_name << ":" << method_name << " is not exist!" << std::endl;
+        LOG_ERROR("request parse error!");
         return;
     }
     google::protobuf::Message *response = service->GetResponsePrototype(method).New();
@@ -152,7 +158,7 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
 
     // 在框架上根据远端rpc请求， 调用当前rpc节点上发布的方法
     // new UserService().Login()(controller, request, response, done)
-    service->CallMethod(method, nullptr, request, response, done);
+    service->CallMethod(method, nullptr, request, response, done); // mprpc/example/friend.pb.cc的806行
 }
 
 // Closure的回调操作，用于序列化rpc的响应和网络发送
@@ -168,7 +174,8 @@ void RpcProvider::SendRpcResponse(const muduo::net::TcpConnectionPtr &conn, goog
     }
     else
     {
-        std::cout << "serialize response_str error!" << std::endl;
+        LOG_ERROR("serialize response_str error!");
+        // std::cout << "serialize response_str error!" << std::endl;
     }
     conn->shutdown(); // 模拟http的短链接服务，有rpcprovider主动断开连接
 }

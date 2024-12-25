@@ -545,7 +545,8 @@ example/caller/CMakeFiles/consumer.dir/callfriendservice.cc.o: ../example/caller
   /usr/include/c++/11/bits/node_handle.h \
   /usr/include/c++/11/bits/unordered_map.h \
   /usr/include/c++/11/bits/erase_if.h \
-  ../example/friend.pb.h \
+  ../src/include/mprpcchannel.h \
+  ../src/include/rpcheader.pb.h \
   /usr/include/c++/11/limits \
   /usr/local/include/google/protobuf/port_def.inc \
   /usr/local/include/google/protobuf/port_undef.inc \
@@ -696,9 +697,11 @@ example/caller/CMakeFiles/consumer.dir/callfriendservice.cc.o: ../example/caller
   /usr/local/include/google/protobuf/extension_set.h \
   /usr/include/c++/11/cassert \
   /usr/local/include/google/protobuf/service.h \
-  ../src/include/mprpcchannel.h \
-  ../src/include/rpcheader.pb.h
+  ../src/include/mprpccontroller.h \
+  ../example/friend.pb.h
 
+
+../src/include/mprpccontroller.h:
 
 /usr/include/c++/11/cassert:
 
