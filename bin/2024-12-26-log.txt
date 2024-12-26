@@ -1,0 +1,14 @@
+2024-12-26 23:0:1 => [INFO]service_name:FriendsServiceRpc methodCnt:1
+2024-12-26 23:0:1 => [INFO]method_name:Getfriendlist
+2024-12-26 23:34:12 => [INFO]service_name:FriendsServiceRpc methodCnt:1
+2024-12-26 23:34:12 => [INFO]method_name:Getfriendlist
+2024-12-26 23:35:30 => [INFO]service_name:FriendsServiceRpc methodCnt:1
+2024-12-26 23:35:30 => [INFO]method_name:Getfriendlist
+2024-12-26 23:40:11 => [INFO]service_name:FriendsServiceRpc methodCnt:1
+2024-12-26 23:40:11 => [INFO]method_name:Getfriendlist
+2024-12-26 23:40:11 => [INFO]zookeeper_init success!
+2024-12-26 23:40:11 => [INFO]znode creade success ... path: /FriendsServiceRpc
+2024-12-26 23:40:11 => [INFO]znode creade success ... path: /FriendsServiceRpc/Getfriendlist
+2024-12-26 23:40:11 => [INFO]RpcProvider::Run server start at ip:127.0.0.1 port:8001
+2024-12-26 23:40:13 => [INFO]zookeeper_init success!
+2024-12-26 23:40:13 => [INFO]rpc response parse success!

@@ -292,7 +292,7 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: \
  /home/wj/code/mprpc/src/include/mprpcchannel.h \
  /home/wj/code/mprpc/src/include/rpcheader.pb.h \
  /home/wj/code/mprpc/src/include/mprpccontroller.h \
- /home/wj/code/mprpc/src/include/rpcprovider.h \
+ /home/wj/code/mprpc/src/include/mprpcprovider.h \
  /usr/include/muduo/net/TcpServer.h /usr/include/muduo/base/Atomic.h \
  /usr/include/muduo/base/noncopyable.h /usr/include/muduo/base/Types.h \
  /usr/include/muduo/net/TcpConnection.h \

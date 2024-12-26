@@ -2,7 +2,7 @@
 #include <string>
 #include "user.pb.h"
 #include "mprpcapplication.h"
-#include "rpcprovider.h"
+#include "mprpcprovider.h"
 
 // using namespace fixbug; // 这个很重要
 
