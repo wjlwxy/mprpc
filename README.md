@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 概述：
 
 1. 使用 protobuf 作为数据（参数）序列化和反序列化方式，
@@ -32,3 +33,6 @@ file.proto：指定要编译的 .proto 文件（–proto_path 路径下的）
 ./consumer -i test.conf
 注：consumer 只需要带有 zookeeper 的 ip 和端口就行，可另写一个 conf；
 provider 需要有自身的 serverip 和 port，也需要 zookeeper 的 ip 和 port
+=======
+# mprpc
+>>>>>>> remotes/origin/main
