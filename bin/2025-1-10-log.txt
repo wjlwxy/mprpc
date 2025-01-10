@@ -1,0 +1,2 @@
+2025-1-10 20:21:50 => [INFO]service_name:FriendsServiceRpc methodCnt:1
+2025-1-10 20:21:50 => [INFO]method_name:Getfriendlist

@@ -1,0 +1,4 @@
+./provider -i test.conf 
+./consumer -i test.conf
+当然consumer只需要带有zookeeper的ip和端口就行，可另写一个conf
+provider需要有自身的serverip和port，也需要zookeeper的ip和port

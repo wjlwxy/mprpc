@@ -177,7 +177,8 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     // std::cout << "errcode:" << response->result().errcode() << std::endl; // 调试代码，response可能存在问题，并未具备fixbug::LoginResponse的属性
 
     // 给下面的method方法的调用，绑定一个Closure的回调函数
-    google::protobuf::Closure *done = google::protobuf::NewCallback<RpcProvider, const muduo::net::TcpConnectionPtr &, google::protobuf::Message *>(this, &RpcProvider::SendRpcResponse, conn, response); // 生成一个Closure* done对象
+    google::protobuf::Closure *done = google::protobuf::NewCallback<RpcProvider,
+                                                                    const muduo::net::TcpConnectionPtr &, google::protobuf::Message *>(this, &RpcProvider::SendRpcResponse, conn, response); // 生成一个Closure* done对象
 
     // 在框架上根据远端rpc请求， 调用当前rpc节点上发布的方法
     // new UserService().Login()(controller, request, response, done)
