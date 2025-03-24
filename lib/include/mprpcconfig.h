@@ -1,6 +1,7 @@
 #pragma once
 #include <unordered_map>
 #include <string>
+#include <mutex>
 
 // rpcserverip rpcserverport   zookeeperip  zookeeperport
 // 框架读取配置文件类
@@ -16,4 +17,6 @@ private:
 
     // 去掉字符串前后的空格
     void Trim(std::string &src_buf);
+
+    std::mutex mtx;
 };

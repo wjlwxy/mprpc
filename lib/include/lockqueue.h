@@ -12,7 +12,7 @@ public:
     // 多个worker线程都会写日志queue，所以需要加锁
     void push(T &data)
     {
-        std::lock_guard<std::mutex> lock(m_mutex);
+        std::lock_guard<std::mutex> lock(m_mutex); // 出作用域自动析构
         m_queue.push(data);
         m_cond.notify_one(); // 通知消费者
     }

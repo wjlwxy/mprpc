@@ -9,6 +9,7 @@
 class FriendService : public fixbug::FriendsServiceRpc
 {
 public:
+// 本地业务
     std::vector<std::string> Getfriendlist(uint32_t user_id)
     {
         std::cout << "doing local service: GetFriendLists" << std::endl;

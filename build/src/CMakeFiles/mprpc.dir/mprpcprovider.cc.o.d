@@ -325,7 +325,7 @@ src/CMakeFiles/mprpc.dir/mprpcprovider.cc.o: \
  /usr/local/include/google/protobuf/stubs/once.h \
  /home/wj/code/mprpc/src/include/mprpcapplication.h \
  /home/wj/code/mprpc/src/include/mprpcconfig.h \
- /home/wj/code/mprpc/src/include/mprpcchannel.h \
+ /home/wj/code/mprpc/src/include/mprpccontroller.h \
  /home/wj/code/mprpc/src/include/rpcheader.pb.h \
  /usr/local/include/google/protobuf/io/coded_stream.h \
  /usr/include/c++/11/climits \
@@ -366,10 +366,7 @@ src/CMakeFiles/mprpc.dir/mprpcprovider.cc.o: \
  /usr/local/include/google/protobuf/generated_enum_reflection.h \
  /usr/local/include/google/protobuf/message.h \
  /usr/local/include/google/protobuf/extension_set.h \
- /usr/include/c++/11/cassert \
- /home/wj/code/mprpc/src/include/mprpccontroller.h \
- /home/wj/code/mprpc/src/include/rpcheader.pb.h \
- /home/wj/code/mprpc/src/include/logger.h \
+ /usr/include/c++/11/cassert /home/wj/code/mprpc/src/include/logger.h \
  /home/wj/code/mprpc/src/include/lockqueue.h /usr/include/c++/11/queue \
  /usr/include/c++/11/deque /usr/include/c++/11/bits/stl_deque.h \
  /usr/include/c++/11/bits/deque.tcc /usr/include/c++/11/bits/stl_queue.h \

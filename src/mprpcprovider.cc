@@ -3,6 +3,7 @@
 #include "rpcheader.pb.h"
 #include "logger.h"
 #include "zookeeperutil.h"
+#include "mprpccontroller.h"
 #include <unistd.h>
 
 /*
@@ -15,7 +16,7 @@ service_name =>  service服务描述
 // 这里是框架提供给外部使用的，可以发布rpc方法的函数接口    ::PROTOBUF_NAMESPACE_ID::Service是所有service的基类
 void RpcProvider::NotifyService(google::protobuf::Service *service)
 {
-    ServiceInfo service_info;
+    ServiceInfo service_info; // 头文件中定义的一个结构体，用于记录服务对象和方法的映射关系
 
     // 获取了服务对象的描述信息
     const google::protobuf::ServiceDescriptor *pserviceDesc = service->GetDescriptor();
@@ -29,7 +30,7 @@ void RpcProvider::NotifyService(google::protobuf::Service *service)
     for (int i = 0; i < methodCnt; i++)
     {
         // 获取了服务对象指定下标的服务方法的描述 （抽象描述）
-        const google::protobuf::MethodDescriptor *pmethodDesc = pserviceDesc->method(i); // 方法
+        const google::protobuf::MethodDescriptor *pmethodDesc = pserviceDesc->method(i); // 其实就是方法
         std::string method_name = pmethodDesc->name();
         service_info.m_methodMap.insert({method_name, pmethodDesc});
 
@@ -112,6 +113,15 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
 
     // 从字符流中读取前4个字节的内容
     uint32_t header_size = 0;
+    /*
+    size_t copy(char* dest, size_t len, size_t pos = 0) const;
+    参数
+    dest: 指向目标字符数组的指针，该数组必须足够大以容纳复制的字符。
+
+    len: 要复制的字符的最大数量。
+
+    pos: 从 std::string 中的哪一个位置开始复制，默认值为 0（即从字符串的开头开始复制）。
+    */
     recv_buf.copy((char *)&header_size, 4, 0); // 为什么不在调用的时候将header_size一并序列化进去？
 
     // 从字符流中读出服务名和方法名的字符流，并反序列化数据，得到rpc请求的详细信息
@@ -125,7 +135,7 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
         // 数据头反序列化成功
         service_name = rpcHeader.service_name();
         method_name = rpcHeader.method_name();
-        args_size = rpcHeader.args_size();
+        args_size = rpcHeader.args_size(); // 这里的args_size是指rpc方法的参数的长度，不是指rpc方法的参数个数
     }
     else
     {
@@ -135,8 +145,13 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
         return;
     }
 
-    // 获取rpc方法参数的字符流数据
+    // 获取rpc方法参数的字符流数据  header_size + 4 跳过前4个字节的内容，header_size是指rpc_header_str的长度，4是指rpc_args_str的长度
     std::string rpc_args_str = recv_buf.substr(header_size + 4, args_size);
+
+    // 获取controller对象指针，用于rpc方法的调用
+    // MprpcController *controller;
+    MprpcController *controller;
+    recv_buf.copy((char *)&controller, 4, 4 + header_size + args_size); // 写入到&controller指针的内存地址,即给controller赋值
 
     // 打印调试信息
     std::cout << "=======================================" << std::endl;
@@ -163,12 +178,21 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
         // std::cout << service_name << ":" << method_name << " is not exist!" << std::endl;
         return;
     }
-    google::protobuf::Service *service = it->second.m_service;      // 获取service对象，new UserService
-    const google::protobuf::MethodDescriptor *method = mit->second; // 获取method对象 Login
+    google::protobuf::Service *service = it->second.m_service;      // 获取service对象，如 UserService
+    const google::protobuf::MethodDescriptor *method = mit->second; // 获取method对象 如 Login
 
     // 生成rpc方法调用的请求request和响应response参数
+    /*
+    service->GetRequestPrototype(method)：通过 service 对象和 method 描述符，
+    可以获取该方法的请求消息类型（即输入参数类型的原型）。
+    具体地，GetRequestPrototype(method) 返回一个 Message 对象的原型，这个原型表示该方法的请求消息类型。
+
+    .New()：在原型上调用 New() 方法，动态地创建一个新的消息对象（即请求对象）。
+    这个请求对象的类型是 google::protobuf::Message，它是所有 Protobuf 消息类的基类，
+    具体的请求类型会根据 method 中定义的请求消息类型来确定。
+    */
     google::protobuf::Message *request = service->GetRequestPrototype(method).New();
-    if (!request->ParseFromString(rpc_args_str))
+    if (!request->ParseFromString(rpc_args_str)) // 反序列化rpc_args_str到request
     {
         LOG_ERROR("request parse error!");
         return;
@@ -176,13 +200,14 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn,
     google::protobuf::Message *response = service->GetResponsePrototype(method).New();
     // std::cout << "errcode:" << response->result().errcode() << std::endl; // 调试代码，response可能存在问题，并未具备fixbug::LoginResponse的属性
 
-    // 给下面的method方法的调用，绑定一个Closure的回调函数
+    // 给下面的method方法的调用，绑定一个Closure的回调函数  
+    // 参数前两个指代RpcProvider的成员函数， 后面两个是此成员函数的参数  <>里的RpcProvider指代要绑定的函数是RpcProvider的成员函数
     google::protobuf::Closure *done = google::protobuf::NewCallback<RpcProvider,
-                                                                    const muduo::net::TcpConnectionPtr &, google::protobuf::Message *>(this, &RpcProvider::SendRpcResponse, conn, response); // 生成一个Closure* done对象
+            const muduo::net::TcpConnectionPtr &, google::protobuf::Message *>(this, &RpcProvider::SendRpcResponse, conn, response); // 生成一个Closure* done对象
 
     // 在框架上根据远端rpc请求， 调用当前rpc节点上发布的方法
     // new UserService().Login()(controller, request, response, done)
-    service->CallMethod(method, nullptr, request, response, done); // mprpc/example/friend.pb.cc的806行
+    service->CallMethod(method, controller, request, response, done); // mprpc/example/friend.pb.cc的806行
 }
 
 // Closure的回调操作，用于序列化rpc的响应和网络发送

@@ -1,6 +1,6 @@
 #pragma once
 #include "mprpcconfig.h"
-#include "mprpcchannel.h"
+// #include "mprpcchannel.h"
 #include "mprpccontroller.h" // 为了使用google::protobuf::RpcController
 
 // mprpc框架的基础类  负责框架的初始化操作

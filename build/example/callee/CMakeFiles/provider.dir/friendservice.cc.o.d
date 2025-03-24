@@ -289,8 +289,6 @@ example/callee/CMakeFiles/provider.dir/friendservice.cc.o: \
  /usr/include/c++/11/cassert /usr/local/include/google/protobuf/service.h \
  /home/wj/code/mprpc/src/include/mprpcapplication.h \
  /home/wj/code/mprpc/src/include/mprpcconfig.h \
- /home/wj/code/mprpc/src/include/mprpcchannel.h \
- /home/wj/code/mprpc/src/include/rpcheader.pb.h \
  /home/wj/code/mprpc/src/include/mprpccontroller.h \
  /home/wj/code/mprpc/src/include/mprpcprovider.h \
  /usr/include/muduo/net/TcpServer.h /usr/include/muduo/base/Atomic.h \

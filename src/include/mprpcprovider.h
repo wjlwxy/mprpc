@@ -24,9 +24,9 @@ private:
     struct ServiceInfo
     {
         google::protobuf::Service* m_service;
-        std::unordered_map<std::string, const google::protobuf::MethodDescriptor*> m_methodMap; // 保存服务映射表
+        std::unordered_map<std::string, const google::protobuf::MethodDescriptor*> m_methodMap; // 保存服务方法映射表
     };
-    // 存储注册成功的服务对象和其服务方法的所有信息
+    // 存储注册成功的服务类的所有信息，key是服务名，value是ServiceInfo结构体
     std::unordered_map<std::string, ServiceInfo> m_serviceMap;
 
     // 组合EventLoop

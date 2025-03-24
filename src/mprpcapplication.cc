@@ -19,6 +19,19 @@ void MprpcApplication::Init(int argc, char **argv)
 
     int c =0;
     std::string config_file;
+    /*
+    argc: main 函数的参数个数
+
+    argv: main 函数的参数字符串数组
+
+    optstring: 选项定义字符串，格式规则：
+
+    单字符：普通选项（如 a 对应 -a）
+
+    字符后加冒号 :：选项需要参数（如 a: 表示 -a value）
+
+    字符后加双冒号 ::：选项参数可选（GNU 扩展，如 a::）
+    */
     while((c = getopt(argc, argv, "i:")) != -1) // -1 表示所有命令行选项已经被解析 ，getopt用于查找命令
     {
         switch (c)
@@ -46,6 +59,7 @@ void MprpcApplication::Init(int argc, char **argv)
     std::cout << "zookeeperport:" << m_config.Load("zookeeperport") <<std::endl;
 }
 
+// 单例模式
 MprpcApplication& MprpcApplication::GetInstance()  // 若函数的返回值为引用(&)，则编译器就不为返回值创建临时变量了。直接返回那个变量的引用。
 {
     static MprpcApplication app;
